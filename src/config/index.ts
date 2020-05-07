@@ -71,10 +71,10 @@ const withStoreURLs = (
       ...textToolsShopifyURLs,
       base: {
         dev:
-          `${URL_PROPS.protocol}//${configYML.development.store}` ||
+          `${URL_PROPS.protocol}://${configYML.development.store}` ||
           textToolsBaseURLs.dev,
         prod:
-          `${URL_PROPS.protocol}//${configYML.production.store}` ||
+          `${URL_PROPS.protocol}://${configYML.production.store}` ||
           textToolsBaseURLs.prod,
       },
     },
