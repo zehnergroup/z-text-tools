@@ -21,6 +21,7 @@
     "watch-feature-create": "tsc-watch --onSuccess \"node ./dist/featureCreate.js -- help\"",
     "watch-feature": "tsc-watch --onSuccess \"node ./dist/feature.js --id=100\"",
     "watch-z-tools": "tsc-watch --onSuccess \"node ./dist/z-tools.js\"",
+    "watch-cms-settings": "tsc-watch --onSuccess \"node ./dist/cmsSettings.js\"",
     "watch": "tsc-watch --onSuccess \"node ./dist/index.js\""
   },
   "repository": {
@@ -46,6 +47,7 @@
     "lodash.isempty": "^4.4.0",
     "lowdb": "^1.0.0",
     "ora": "^4.0.4",
+    "json-beautify": "^1.1.1",
     "simple-git": "^1.132.0",
     "yaml": "^1.10.0",
     "yargs": "^15.3.1"
