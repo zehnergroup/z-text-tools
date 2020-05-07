@@ -6,7 +6,6 @@ import {
   getPRBody,
   getThemeTitle,
   getYMLComment,
-  getBranchTitle,
 } from "./text";
 import { handlify } from "./utils";
 import updateConfigYML from "./config/updateConfigYML";
@@ -34,18 +33,14 @@ const fsPromises = fs.promises;
     prodThemeID,
     config.urls.jira.base,
     config.urls.jira.prefix || "",
-    branchType,
-    prTitle
+    config.urls.shopify.editor,
+    config.urls.shopify.hash
   );
   const themeName = getThemeTitle(ticketID, prTitle, author);
   const ymlComment = getYMLComment(themeName, devThemeID, prodThemeID);
 
   // update config YML with comment and theme IDs
   updateConfigYML(ymlComment);
-
-  const branchTitle = getBranchTitle(ticketID, prTitle, branchType);
-
-  console.log(branchTitle);
 
   // PR body
   await fsPromises

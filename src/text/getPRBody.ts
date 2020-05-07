@@ -61,8 +61,8 @@ export default (
   prodThemeID: string,
   jiraBaseURL: string,
   jiraPrefix: string,
-  branchType: string,
-  prTitle: string
+  shopifyEditorSuffix?: string,
+  shopifyHash?: string
 ) =>
   pipe(
     withJiraTicket(ticketID, jiraBaseURL, jiraPrefix),
@@ -70,7 +70,9 @@ export default (
       shopifyDevBaseURL,
       shopifyProdBaseURL,
       devThemeID,
-      prodThemeID
+      prodThemeID,
+      shopifyEditorSuffix,
+      shopifyHash
     ),
     withFooter
     // withPRTitle(ticketID, branchType, prTitle)
