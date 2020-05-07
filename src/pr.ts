@@ -24,8 +24,8 @@ import getPRTitle from "./text/getPRTitle";
     prodThemeID,
     config.urls.jira.base,
     config.urls.jira.prefix || "",
-    branchType,
-    prTitle
+    config.urls.shopify.editor,
+    config.urls.shopify.hash
   );
 
   const octokit = new Octokit({
@@ -42,6 +42,7 @@ import getPRTitle from "./text/getPRTitle";
     head: branchTitle,
     title: prTitleWithTicketID,
     body: prBody,
+    draft: true,
   });
 
   console.log(`Opened PR for ${branchTitle} in ${repo}`);
