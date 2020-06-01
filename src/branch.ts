@@ -20,7 +20,7 @@ import { SimpleGit } from "simple-git/promise";
 
   const git: SimpleGit = await localGit(config.workingDirectory);
   // checkout develop by default
-  await git.checkout("develop");
+  await git.checkout("development");
 
   status = await git.status();
   console.log(`Switched to ${status.current || "undefined"} branch`);
