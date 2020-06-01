@@ -4,6 +4,8 @@ import errors from "../errors";
 import getConfigYML, { ConfigYML } from "./getConfigYML";
 import { getProperty, pipe } from "../utils";
 
+import { ConfigGithub, ConfigURLs } from "../types";
+
 const fsPromises = fs.promises;
 
 const FILE_NAMES = {
@@ -13,21 +15,6 @@ const FILE_NAMES = {
 
 const URL_PROPS = {
   protocol: "https",
-};
-
-export type ConfigURLs = {
-  jira: {
-    prefix?: string;
-    base: string;
-  };
-  shopify: {
-    hash?: string;
-    editor?: string;
-    base: {
-      dev: string;
-      prod: string;
-    };
-  };
 };
 
 /***
@@ -50,12 +37,8 @@ export type Config = {
   pr: {
     title: string;
   };
+  github: ConfigGithub;
   author?: string;
-  github: {
-    repo: string;
-    owner: string;
-    token?: string;
-  };
 };
 
 // TODO create type/interface TextToolsConfig
