@@ -24,7 +24,7 @@ import { SimpleGit } from "simple-git/promise";
   const branches = await git.branch();
   if (branches.all.indexOf(branchTitle) === -1) {
     // checkout develop by default
-    await git.checkout("develop");
+    await git.checkout("development");
     status = await git.status();
     console.log(`Switched to ${status.current || "undefined"} branch`);
     await git.checkoutLocalBranch(branchTitle);
