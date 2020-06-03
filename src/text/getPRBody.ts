@@ -8,18 +8,29 @@ const withCMSPreviewURLs = (
   shopifyEditorSuffix?: string,
   shopifyHash?: string
 ): Function => (body: string): string => {
-  const themeSuffix = "/admin/themes";
+  const themeSuffix = "admin/themes";
 
   return `${body}
 - CMS preview URL: 
-  - DEV: ${shopifyDevBaseURL}${themeSuffix}/${devThemeID}${
+  - DEV: ${shopifyDevBaseURL}/${themeSuffix}/${devThemeID}${
     shopifyEditorSuffix || ""
   }${shopifyHash || ""}
-  - PROD: ${shopifyProdBaseURL}${themeSuffix}/${prodThemeID}${
+  - PROD: ${shopifyProdBaseURL}/${themeSuffix}/${prodThemeID}${
     shopifyEditorSuffix || ""
   }${shopifyHash || ""}
 `;
 };
+
+const withStorePreviewURLs = (
+  shopifyDevBaseURL: string,
+  shopifyProdBaseURL: string,
+  devThemeID: string,
+  prodThemeID: string
+): Function => (body: string): string => `${body}
+- Store preview URL: 
+  - DEV: ${shopifyDevBaseURL}/?preview_theme_id=${devThemeID}
+  - PROD: ${shopifyProdBaseURL}/?preview_theme_id=${prodThemeID}
+`;
 
 const withFooter = (body: string): string => `${body}
 
@@ -73,6 +84,12 @@ export default (
       prodThemeID,
       shopifyEditorSuffix,
       shopifyHash
+    ),
+    withStorePreviewURLs(
+      shopifyDevBaseURL,
+      shopifyProdBaseURL,
+      devThemeID,
+      prodThemeID
     ),
     withFooter
     // withPRTitle(ticketID, branchType, prTitle)
