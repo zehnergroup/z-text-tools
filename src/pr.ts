@@ -38,7 +38,7 @@ import getPRTitle from "./text/getPRTitle";
   await octokit.pulls.create({
     owner,
     repo,
-    base: "develop",
+    base: "development",
     head: branchTitle,
     title: prTitleWithTicketID,
     body: prBody,
