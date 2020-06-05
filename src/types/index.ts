@@ -1,3 +1,13 @@
+type ThemeConfig = {
+  theme_id?: number;
+  store?: string;
+};
+
+export type ConfigYML = {
+  development: ThemeConfig;
+  production: ThemeConfig;
+};
+
 export type Branch = {
   type: string;
   name?: string;
@@ -8,8 +18,8 @@ export type Ticket = {
 };
 
 export type Themes = {
-  dev: string;
-  prod: string;
+  dev?: number;
+  prod?: number;
 };
 
 export type PR = {
@@ -20,6 +30,7 @@ export type ConfigGithub = {
   repo: string;
   owner: string;
   token?: string;
+  baseBranch?: string;
 };
 
 export type ShopifyURLs = {
@@ -32,6 +43,7 @@ export type ShopifyURLs = {
 };
 
 export type JiraURLs = {
+  projectPrefix?: string;
   prefix?: string;
   base: string;
 };
@@ -54,3 +66,9 @@ export type Feature = {
   branch: Branch;
   pr: PR;
 };
+
+export interface Database {
+  config: Config;
+  currentFeature: number | null;
+  features: Feature[];
+}
