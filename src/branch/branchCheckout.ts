@@ -7,9 +7,7 @@ import { SimpleGit } from "simple-git/promise";
 export default async (feature: Feature, config: Config): Promise<void> => {
   try {
     const {
-      ticket: { id: ticketID },
-      pr: { title: prTitle },
-      branch: { type: branchType },
+      branch: { name: branchName },
     } = feature;
 
     const {
@@ -18,7 +16,6 @@ export default async (feature: Feature, config: Config): Promise<void> => {
     } = config;
 
     let status;
-    const branchTitle = getBranchTitle(ticketID, prTitle, branchType);
 
     const git: SimpleGit = await localGit(workingDirectory);
     // checkout develop by default
@@ -28,14 +25,14 @@ export default async (feature: Feature, config: Config): Promise<void> => {
     console.log(`Switched to ${status.current || "undefined"} branch`);
 
     const branches = await git.branch();
-    if (branches.all.indexOf(branchTitle) === -1) {
-      await git.checkoutLocalBranch(branchTitle);
+    if (branchName && branches.all.indexOf(branchName) === -1) {
+      await git.checkoutLocalBranch(branchName);
       status = await git.status();
       console.log(
         `Created and switched to ${status.current || "undefined"} branch`
       );
     } else {
-      await git.checkout(branchTitle);
+      branchName && (await git.checkout(branchName));
       status = await git.status();
       console.log(`Switched to ${status.current || "undefined"} branch`);
     }
