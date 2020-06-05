@@ -8,14 +8,14 @@ import getPRTitle from "../text/getPRTitle";
 export default async (feature: Feature, config: Config) => {
   try {
     const {
-      github: { token: auth, repo, owner },
+      github: { token: auth, repo, owner, baseBranch },
     } = config;
 
     const {
       ticket: { id: ticketID },
       themes: { dev: devThemeID, prod: prodThemeID },
       pr: { title: prTitle },
-      branch: { type: branchType },
+      branch: { type: branchType, name: branchName },
     } = feature;
 
     const prBody = getPRBody(
@@ -34,20 +34,21 @@ export default async (feature: Feature, config: Config) => {
       auth,
     });
 
-    const branchTitle = getBranchTitle(ticketID, prTitle, branchType);
-    const prTitleWithTicketID = getPRTitle(ticketID, branchType, prTitle);
+    if (branchName) {
+      const prTitleWithTicketID = getPRTitle(ticketID, branchType, prTitle);
 
-    await octokit.pulls.create({
-      owner,
-      repo,
-      base: "development",
-      head: branchTitle,
-      title: prTitleWithTicketID,
-      body: prBody,
-      draft: true,
-    });
+      await octokit.pulls.create({
+        owner,
+        repo,
+        base: baseBranch || "development",
+        head: branchName,
+        title: prTitleWithTicketID,
+        body: prBody,
+        draft: true,
+      });
 
-    console.log(`Opened PR for ${branchTitle} in ${repo}`);
+      console.log(`Opened PR for ${branchName} in ${repo}`);
+    }
   } catch (error) {
     console.log(error);
   }
