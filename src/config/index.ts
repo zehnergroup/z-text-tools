@@ -1,10 +1,12 @@
 import fs from "fs";
 import path from "path";
 import errors from "../errors";
-import getConfigYML, { ConfigYML } from "./getConfigYML";
-import { getProperty, pipe } from "../utils";
+import { Config, ConfigYML } from "../types";
 
-import { ConfigGithub, ConfigURLs } from "../types";
+import getConfigYML from "./getConfigYML";
+import getWorkingDirectory from "./getWorkingDirectory";
+
+import { getProperty, pipe } from "../utils";
 
 const fsPromises = fs.promises;
 
@@ -15,30 +17,6 @@ const FILE_NAMES = {
 
 const URL_PROPS = {
   protocol: "https",
-};
-
-/***
- * Config Type
- * ================================
- */
-export type Config = {
-  workingDirectory: string;
-  urls: ConfigURLs;
-  ticket: {
-    id: string;
-  };
-  themes: {
-    dev: string;
-    prod: string;
-  };
-  branch: {
-    type: string;
-  };
-  pr: {
-    title: string;
-  };
-  github: ConfigGithub;
-  author?: string;
 };
 
 // TODO create type/interface TextToolsConfig
@@ -70,11 +48,8 @@ const withStoreURLs = (
  */
 export const getConfig = async (): Promise<Config> => {
   try {
-    const conf = require("../../config.json");
-    const workingDirectory = conf.workingDirectory;
-    if (!workingDirectory || !fs.existsSync(workingDirectory)) {
-      return Promise.reject(new Error(errors.workingDirectory));
-    }
+    // get working directory
+    const workingDirectory = await getWorkingDirectory();
 
     // get config.yml
     const configYML: ConfigYML = await getConfigYML();
@@ -95,19 +70,10 @@ export const getConfig = async (): Promise<Config> => {
 
     const textToolsCofig = JSON.parse(textToolsCofigBuf.toString());
 
-    // check texttoolspr.json
-    const textToolsPRPath = path.join(workingDirectory, FILE_NAMES.textToolsPR);
-    if (!fs.existsSync(textToolsPRPath)) {
-      return Promise.reject(errors.textToolsPR);
-    }
-
-    const textToolsPRBuf = await fsPromises.readFile(textToolsPRPath, "UTF-8");
-    const textToolsPR = JSON.parse(textToolsPRBuf.toString());
-
     return Promise.resolve({
       workingDirectory,
       ...textToolsCofig,
-      ...textToolsPR,
+      // ...textToolsPR,
       urls: pipe(
         withStoreURLs(
           configYML,
