@@ -10,7 +10,11 @@
     "branch-push": "tsc && node ./dist/branchPush.js",
     "pr": "tsc && node ./dist/pr.js",
     "init": "tsc && node ./dist/init.js",
+    "feature": "tsc && node ./dist/feature.js",
+    "feature-create": "tsc && node ./dist/featureCreate.js",
     "watch-init": "tsc-watch --onSuccess \"node ./dist/init.js\"",
+    "watch-feature-create": "tsc-watch --onSuccess \"node ./dist/featureCreate.js -- help\"",
+    "watch-feature": "tsc-watch --onSuccess \"node ./dist/feature.js --id=100\"",
     "watch": "tsc-watch --onSuccess \"node ./dist/index.js\""
   },
   "repository": {
@@ -21,16 +25,20 @@
   "license": "UNLICENSED",
   "devDependencies": {
     "@types/node": "^13.11.1",
-    "@types/yargs": "^15.0.4",
+    "@types/yargs": "^15.0.5",
     "tsc-watch": "^4.2.3",
     "typescript": "^3.8.3"
   },
   "dependencies": {
     "@octokit/rest": "^17.3.0",
     "@types/js-yaml": "^3.12.3",
+    "@types/lodash.isempty": "^4.4.6",
+    "@types/lowdb": "^1.0.9",
     "js-yaml": "^3.13.1",
+    "lodash.isempty": "^4.4.0",
     "lowdb": "^1.0.0",
     "simple-git": "^1.132.0",
+    "yaml": "^1.10.0",
     "yargs": "^15.3.1"
   }
 }
