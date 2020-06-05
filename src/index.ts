@@ -1,20 +1,17 @@
 import path from "path";
 import fs from "fs";
-import { getConfig, Config } from "./config";
+import { getConfig } from "./config";
+import { Config } from "./types";
 
-import {
-  getPRBody,
-  getThemeTitle,
-  getYMLComment,
-} from "./text";
+import { getPRBody, getThemeTitle, getYMLComment } from "./text";
 import { handlify } from "./utils";
-import updateConfigYML from "./config/updateConfigYML";
+import updateConfigYML from "./config/writeYMLComment";
 
 // FS Promises Interface
 const fsPromises = fs.promises;
 
 (async () => {
-  const config: Config = await getConfig();
+  const config: any = await getConfig();
 
   const {
     workingDirectory,
