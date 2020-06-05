@@ -1,51 +1,19 @@
-import { getConfig, Config } from "./config";
-
-import { getPRBody, getThemeTitle, getBranchTitle } from "./text";
-
-import { Octokit } from "@octokit/rest";
-import getPRTitle from "./text/getPRTitle";
+import { Config, Feature } from "./types";
+import getCurrentFeature from "./feature/getCurrentFeature";
+import getDBAdapter from "./db/getDBAdapter";
+import pr from "./pr/pr";
 
 (async () => {
-  const config: Config = await getConfig();
+  const db = await getDBAdapter();
+  const config: Config = db.get("config").value();
 
-  const {
-    ticket: { id: ticketID },
-    themes: { dev: devThemeID, prod: prodThemeID },
-    pr: { title: prTitle },
-    branch: { type: branchType },
-    github: { token: auth, repo, owner },
-  } = config;
+  const currentFeature: Feature | null = await getCurrentFeature();
 
-  const prBody = getPRBody(
-    ticketID,
-    config.urls.shopify.base.dev,
-    config.urls.shopify.base.prod,
-    devThemeID,
-    prodThemeID,
-    config.urls.jira.base,
-    config.urls.jira.prefix || "",
-    config.urls.shopify.editor,
-    config.urls.shopify.hash
-  );
+  if (currentFeature && config) {
+    pr(currentFeature, config);
+  }
 
-  const octokit = new Octokit({
-    auth,
-  });
-
-  const branchTitle = getBranchTitle(ticketID, prTitle, branchType);
-  const prTitleWithTicketID = getPRTitle(ticketID, branchType, prTitle);
-
-  await octokit.pulls.create({
-    owner,
-    repo,
-    base: "development",
-    head: branchTitle,
-    title: prTitleWithTicketID,
-    body: prBody,
-    draft: true,
-  });
-
-  console.log(`Opened PR for ${branchTitle} in ${repo}`);
+  // TODO handle otherwise
 })().catch((err) => {
   console.log(err);
 });

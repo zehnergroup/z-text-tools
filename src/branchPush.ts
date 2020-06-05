@@ -1,45 +1,19 @@
-import { getConfig, Config } from "./config";
-
-import { getBranchTitle } from "./text";
-import localGit, { printStatus } from "./git/localGit";
-import { SimpleGit } from "simple-git/promise";
+import { Config, Feature } from "./types";
+import getCurrentFeature from "./feature/getCurrentFeature";
+import getDBAdapter from "./db/getDBAdapter";
+import branchPush from "./branch/branchPush";
 
 (async () => {
-  const config: Config = await getConfig();
+  const db = await getDBAdapter();
+  const config: Config = db.get("config").value();
 
-  const {
-    ticket: { id: ticketID },
-    pr: { title: prTitle },
-    branch: { type: branchType },
-    github: { repo, owner },
-  } = config;
+  const currentFeature: Feature | null = await getCurrentFeature();
 
-  let status;
-  const branchTitle = getBranchTitle(ticketID, prTitle, branchType);
-
-  console.log(branchTitle);
-
-  const git: SimpleGit = await localGit(config.workingDirectory);
-
-  const branches = await git.branch();
-  if (branches.all.indexOf(branchTitle) === -1) {
-    // checkout develop by default
-    await git.checkout("development");
-    status = await git.status();
-    console.log(`Switched to ${status.current || "undefined"} branch`);
-    await git.checkoutLocalBranch(branchTitle);
-    status = await git.status();
-    console.log(
-      `Created and switched to ${status.current || "undefined"} branch`
-    );
-  } else {
-    await git.checkout(branchTitle);
-    status = await git.status();
-    console.log(`Switched to ${status.current || "undefined"} branch`);
+  if (currentFeature && config) {
+    branchPush(currentFeature, config);
   }
 
-  // await git.addRemote("origin", repo);
-  await git.push("origin", branchTitle, { "-u": null });
+  // TODO handle otherwise
 })().catch((err) => {
   console.log(err);
 });
