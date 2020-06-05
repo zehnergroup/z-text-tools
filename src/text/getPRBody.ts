@@ -3,8 +3,8 @@ import { pipe } from "../utils";
 const withCMSPreviewURLs = (
   shopifyDevBaseURL: string,
   shopifyProdBaseURL: string,
-  devThemeID: string,
-  prodThemeID: string,
+  devThemeID: number | "",
+  prodThemeID: number | "",
   shopifyEditorSuffix?: string,
   shopifyHash?: string
 ): Function => (body: string): string => {
@@ -24,8 +24,8 @@ const withCMSPreviewURLs = (
 const withStorePreviewURLs = (
   shopifyDevBaseURL: string,
   shopifyProdBaseURL: string,
-  devThemeID: string,
-  prodThemeID: string
+  devThemeID: number | "",
+  prodThemeID: number | ""
 ): Function => (body: string): string => `${body}
 - Store preview URL: 
   - DEV: ${shopifyDevBaseURL}/?preview_theme_id=${devThemeID}
@@ -68,8 +68,8 @@ export default (
   ticketID: string,
   shopifyDevBaseURL: string,
   shopifyProdBaseURL: string,
-  devThemeID: string,
-  prodThemeID: string,
+  devThemeID: number | "",
+  prodThemeID: number | "",
   jiraBaseURL: string,
   jiraPrefix: string,
   shopifyEditorSuffix?: string,
