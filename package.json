@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Helper Tools For Theme Development",
   "main": "index.js",
+  "preferGlobal": true,
+  "bin": {
+    "z-tools": "bin/z-tools.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc && node ./dist/index.js",
@@ -27,13 +31,13 @@
     "@types/node": "^13.11.1",
     "@types/yargs": "^15.0.5",
     "tsc-watch": "^4.2.3",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "@types/js-yaml": "^3.12.3",
+    "@types/lodash.isempty": "^4.4.6",
+    "@types/lowdb": "^1.0.9"
   },
   "dependencies": {
     "@octokit/rest": "^17.3.0",
-    "@types/js-yaml": "^3.12.3",
-    "@types/lodash.isempty": "^4.4.6",
-    "@types/lowdb": "^1.0.9",
     "js-yaml": "^3.13.1",
     "lodash.isempty": "^4.4.0",
     "lowdb": "^1.0.0",
