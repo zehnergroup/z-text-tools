@@ -3,8 +3,7 @@ import YAML from "yaml";
 
 import path from "path";
 import errors from "../errors";
-import getWorkingDirectory from "./getWorkingDirectory";
-
+import getWorkingDirectory from "../db/getWorkingDirectory";
 const fsPromises = fs.promises;
 
 const CONFIG_FILE_NAME = "config.yml";
