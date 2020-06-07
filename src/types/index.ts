@@ -72,3 +72,7 @@ export interface Database {
   currentFeature: number | null;
   features: Feature[];
 }
+
+export interface ZToolsDB {
+  workingDirectory: string | null;
+}
