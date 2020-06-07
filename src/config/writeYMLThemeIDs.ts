@@ -4,7 +4,7 @@ import YAML from "yaml";
 
 import errors from "../errors";
 import getConfigYML from "./getConfigYML";
-import getWorkingDirectory from "./getWorkingDirectory";
+import getWorkingDirectory from "../db/getWorkingDirectory";
 import { ConfigYML } from "../types";
 import getConfigYMLDocument from "./getConfigYMLDocument";
 import { YAMLError } from "yaml/util";

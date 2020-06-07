@@ -1,10 +1,9 @@
 import fs from "fs";
 import path from "path";
 import errors from "../errors";
+import getWorkingDirectory from "../db/getWorkingDirectory";
 
 const fsPromises = fs.promises;
-
-import getWorkingDirectory from "./getWorkingDirectory";
 
 const CONFIG_FILE_NAME = "config.yml";
 

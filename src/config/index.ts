@@ -4,7 +4,7 @@ import errors from "../errors";
 import { Config, ConfigYML } from "../types";
 
 import getConfigYML from "./getConfigYML";
-import getWorkingDirectory from "./getWorkingDirectory";
+import getWorkingDirectory from "../db/getWorkingDirectory";
 
 import { getProperty, pipe } from "../utils";
 
@@ -73,7 +73,6 @@ export const getConfig = async (): Promise<Config> => {
     return Promise.resolve({
       workingDirectory,
       ...textToolsCofig,
-      // ...textToolsPR,
       urls: pipe(
         withStoreURLs(
           configYML,
