@@ -1,8 +1,8 @@
 export default {
   config:
     '"config.json" is missing. Add  "config.json" with a valid path to theme directory',
-  workingDirectory:
-    "Could not find working directory by provided path. Valid working directory path is required.",
+  workingDirectory: (path: string) =>
+    `Could not find working directory by ${path} path. Valid working directory path is required.`,
   textToolsCofig: '"texttoolsconfig.json" is required to initialize',
   textToolsPR: '"texttoolspr.json" is required to initialize',
   configYML: {
