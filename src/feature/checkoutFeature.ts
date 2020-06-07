@@ -5,7 +5,7 @@ import writeYMLThemeIDs from "../config/writeYMLThemeIDs";
 import getDBAdapter from "../db/getDBAdapter";
 import branchCheckout from "../branch/branchCheckout";
 import cp from "child_process";
-import getWorkingDirectory from "../config/getWorkingDirectory";
+import getWorkingDirectory from "../db/getWorkingDirectory";
 
 export default async (id: number): Promise<void> => {
   try {
