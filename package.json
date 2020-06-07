@@ -13,12 +13,14 @@
     "branch": "tsc && node ./dist/branch.js",
     "branch-push": "tsc && node ./dist/branchPush.js",
     "pr": "tsc && node ./dist/pr.js",
+    "z-tools": "tsc && node ./dist/z-tools.js",
     "init": "tsc && node ./dist/init.js",
     "feature": "tsc && node ./dist/feature.js",
     "feature-create": "tsc && node ./dist/featureCreate.js",
     "watch-init": "tsc-watch --onSuccess \"node ./dist/init.js\"",
     "watch-feature-create": "tsc-watch --onSuccess \"node ./dist/featureCreate.js -- help\"",
     "watch-feature": "tsc-watch --onSuccess \"node ./dist/feature.js --id=100\"",
+    "watch-z-tools": "tsc-watch --onSuccess \"node ./dist/z-tools.js\"",
     "watch": "tsc-watch --onSuccess \"node ./dist/index.js\""
   },
   "repository": {
@@ -38,9 +40,11 @@
   },
   "dependencies": {
     "@octokit/rest": "^17.3.0",
+    "chalk": "^4.0.0",
     "js-yaml": "^3.13.1",
     "lodash.isempty": "^4.4.0",
     "lowdb": "^1.0.0",
+    "ora": "^4.0.4",
     "simple-git": "^1.132.0",
     "yaml": "^1.10.0",
     "yargs": "^15.3.1"
