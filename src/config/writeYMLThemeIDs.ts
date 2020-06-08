@@ -11,7 +11,7 @@ const CONFIG_FILE_NAME = "config.yml";
 export default async (
   workingDirectory: string,
   devThemeID?: number,
-  prodTheemID?: number
+  prodThemeID?: number
 ): Promise<void> => {
   try {
     // get config.yml
@@ -28,7 +28,7 @@ export default async (
       },
       production: {
         ...configYML.production,
-        ["theme_id"]: prodTheemID,
+        ["theme_id"]: prodThemeID,
       },
     };
 
@@ -40,9 +40,6 @@ export default async (
     configYMLDocumentUPD.commentBefore = configYMLCommentBefore;
 
     await fsPromises.writeFile(configYMLPath, configYMLDocumentUPD.toString());
-    console.log(
-      `Updated config.yml with  dev: ${devThemeID}, prod: ${prodTheemID} theme IDs`
-    );
   } catch (error) {
     Promise.reject(error);
   }
