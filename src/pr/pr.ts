@@ -1,11 +1,12 @@
+import ora from "ora";
 import { Config, Feature } from "../types";
 
-import { getPRBody, getBranchTitle } from "../text";
+import { getPRBody } from "../text";
 
 import { Octokit } from "@octokit/rest";
-import getPRTitle from "../text/getPRTitle";
+import errors from "../errors";
 
-export default async (feature: Feature, config: Config) => {
+export default async (feature: Feature, config: Config): Promise<void> => {
   try {
     const {
       github: { token: auth, repo, owner, baseBranch },
@@ -15,7 +16,7 @@ export default async (feature: Feature, config: Config) => {
       ticket: { id: ticketID },
       themes: { dev: devThemeID, prod: prodThemeID },
       pr: { title: prTitle },
-      branch: { type: branchType, name: branchName },
+      branch: { name: branchName },
     } = feature;
 
     const prBody = getPRBody(
@@ -35,21 +36,22 @@ export default async (feature: Feature, config: Config) => {
     });
 
     if (branchName) {
-      const prTitleWithTicketID = getPRTitle(ticketID, branchType, prTitle);
-
       await octokit.pulls.create({
         owner,
         repo,
         base: baseBranch || "development",
         head: branchName,
-        title: prTitleWithTicketID,
+        title: prTitle,
         body: prBody,
         draft: true,
       });
 
-      console.log(`Opened PR for ${branchName} in ${repo}`);
+      ora(`Opened draft PR for ${branchName} in ${repo}`).succeed();
+      return Promise.resolve();
     }
+
+    return Promise.reject(errors.branchName);
   } catch (error) {
-    console.log(error);
+    return Promise.reject(error);
   }
 };
