@@ -54,7 +54,6 @@ export type ConfigURLs = {
 };
 
 export type Config = {
-  workingDirectory: string;
   urls: ConfigURLs;
   author?: string;
   github: ConfigGithub;
@@ -71,8 +70,4 @@ export interface Database {
   config: Config;
   currentFeature: number | null;
   features: Feature[];
-}
-
-export interface ZToolsDB {
-  workingDirectory: string | null;
 }
