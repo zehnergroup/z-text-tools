@@ -11,10 +11,10 @@ import updateConfigYML from "./config/writeYMLComment";
 const fsPromises = fs.promises;
 
 (async () => {
-  const config: any = await getConfig();
+  const workingDirectory = process.cwd();
+  const config: any = await getConfig(workingDirectory);
 
   const {
-    workingDirectory,
     ticket: { id: ticketID },
     themes: { dev: devThemeID, prod: prodThemeID },
     pr: { title: prTitle },
@@ -37,7 +37,7 @@ const fsPromises = fs.promises;
   const ymlComment = getYMLComment(themeName, devThemeID, prodThemeID);
 
   // update config YML with comment and theme IDs
-  updateConfigYML(ymlComment);
+  updateConfigYML(workingDirectory, ymlComment);
 
   // PR body
   await fsPromises
