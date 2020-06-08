@@ -5,7 +5,11 @@ import { SimpleGit } from "simple-git/promise";
 import { Feature } from "../types";
 import branchCheckout from "./branchCheckout";
 
-export default async (feature: Feature, config: Config) => {
+export default async (
+  workingDirectory: string,
+  feature: Feature,
+  config: Config
+) => {
   try {
     const {
       branch: { name: branchName },
@@ -13,11 +17,11 @@ export default async (feature: Feature, config: Config) => {
 
     let status;
 
-    const git: SimpleGit = await localGit(config.workingDirectory);
+    const git: SimpleGit = await localGit(workingDirectory);
 
     const branches = await git.branch();
     if (branchName && branches.all.indexOf(branchName) === -1) {
-      await branchCheckout(feature, config);
+      await branchCheckout(workingDirectory, feature, config);
     } else {
       branchName && (await git.checkout(branchName));
       status = await git.status();

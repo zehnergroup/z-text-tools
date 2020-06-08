@@ -1,15 +1,15 @@
 import fs from "fs";
 import path from "path";
 import errors from "../errors";
-import getWorkingDirectory from "../db/getWorkingDirectory";
 
 const fsPromises = fs.promises;
 const CONFIG_FILE_NAME = "config.yml";
 
-export default async (ymlComment: string): Promise<void> => {
+export default async (
+  workingDirectory: string,
+  ymlComment: string
+): Promise<void> => {
   try {
-    const workingDirectory = await getWorkingDirectory();
-
     // check config.yml
     const configYMLPath = path.join(workingDirectory, CONFIG_FILE_NAME);
     if (!fs.existsSync(configYMLPath)) {

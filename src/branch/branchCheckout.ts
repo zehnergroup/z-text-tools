@@ -1,17 +1,19 @@
 import { Feature, Config } from "../types";
 
-import { getBranchTitle } from "../text";
 import localGit from "../git/localGit";
 import { SimpleGit } from "simple-git/promise";
 
-export default async (feature: Feature, config: Config): Promise<void> => {
+export default async (
+  workingDirectory: string,
+  feature: Feature,
+  config: Config
+): Promise<void> => {
   try {
     const {
       branch: { name: branchName },
     } = feature;
 
     const {
-      workingDirectory,
       github: { baseBranch },
     } = config;
 

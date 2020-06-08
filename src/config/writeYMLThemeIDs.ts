@@ -1,27 +1,21 @@
 import fs from "fs";
 import path from "path";
 import YAML from "yaml";
-
-import errors from "../errors";
-import getConfigYML from "./getConfigYML";
-import getWorkingDirectory from "../db/getWorkingDirectory";
 import { ConfigYML } from "../types";
 import getConfigYMLDocument from "./getConfigYMLDocument";
-import { YAMLError } from "yaml/util";
 
 const fsPromises = fs.promises;
 
 const CONFIG_FILE_NAME = "config.yml";
 
 export default async (
+  workingDirectory: string,
   devThemeID?: number,
   prodTheemID?: number
 ): Promise<void> => {
   try {
-    const workingDirectory = await getWorkingDirectory();
-
     // get config.yml
-    const configYMLDocument = await getConfigYMLDocument();
+    const configYMLDocument = await getConfigYMLDocument(workingDirectory);
     const configYML: ConfigYML = configYMLDocument.toJSON();
     const configYMLCommentBefore: string | null | undefined =
       configYMLDocument.commentBefore;

@@ -4,7 +4,6 @@ import path from "path";
 import FileSync from "lowdb/adapters/FileSync";
 
 import { Database } from "../types";
-import getWorkingDirectory from "./getWorkingDirectory";
 
 const FILE_NAMES = {
   textToolsDB: "texttoolsdb.json",
@@ -13,10 +12,10 @@ const FILE_NAMES = {
 /**
  * Sets defaults as a side effect
  */
-export default async (): Promise<low.LowdbSync<Database>> => {
+export default async (
+  workingDirectory: string
+): Promise<low.LowdbSync<Database>> => {
   try {
-    // get working directory
-    const workingDirectory = await getWorkingDirectory();
     const adapter = await new FileSync<Database>(
       path.join(workingDirectory, FILE_NAMES.textToolsDB)
     );
