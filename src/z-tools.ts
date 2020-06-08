@@ -13,6 +13,13 @@ try {
     .scriptName("z-tools")
     .strict()
     .version("version", "Show version number", VERSION)
+    .options({
+      path: {
+        alias: "p",
+        describe: "Explicitly set a working directory",
+        demand: false,
+      },
+    })
     .wrap(yargs.terminalWidth())
     .parse();
 } catch (error) {
