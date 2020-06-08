@@ -1,46 +1,51 @@
 import isEmpty from "lodash.isempty";
+import chalk from "chalk";
+import ora from "ora";
 
 import { Feature, Config } from "../../types";
 import { getConfig } from "../../config";
 import getPRTitle from "../../text/getPRTitle";
 import getTicketIdentifier from "../../text/getTicketIdentifier";
 import { getBranchTitle } from "../../text";
+import { displayFeatures } from "../../tables";
+
 import getDBAdapter from "../../db/getDBAdapter";
+import getWorkingDirectory from "../../workingDirectory/getWorkingDirectory";
 
 export const command = "create";
 export const desc = "Create new feature";
 export const builder = {
   id: {
-    describe: "Provide ticket id",
+    describe: "Ticket id",
     demand: true,
   },
   title: {
-    describe: "Give descriptive title to a feature",
+    describe: "Descriptive title to a feature (up to 5 words)",
     demand: true,
   },
   ["theme-dev"]: {
-    decribe: "Development theme id",
+    describe: "Development theme id",
     demand: false,
   },
   ["theme-prod"]: {
-    decribe: "Production theme id",
+    describe: "Production theme id",
     demand: false,
   },
   ["branch-type"]: {
-    decribe: "Branch type, example: feature | bugfix",
+    describe: "Branch type, example: feature | bugfix",
     demand: false,
   },
 };
 export const handler = async (args: any) => {
+  const spinner = ora("Creating  new feature ").start();
   try {
-    console.log(JSON.stringify(args));
-
-    const db = await getDBAdapter();
+    const workingDirectory = await getWorkingDirectory(args);
+    const db = await getDBAdapter(workingDirectory);
     let config: Config = db.get("config").value();
 
     // create config, if not  created
     if (isEmpty(config)) {
-      const _config: Config = await getConfig();
+      const _config: Config = await getConfig(workingDirectory);
       db.set("config", _config).write();
       config = db.get("config").value();
     }
@@ -53,6 +58,7 @@ export const handler = async (args: any) => {
 
     const branchType = args.branchType || "feature";
 
+    // TODO
     // if theme-dev and themme-prod are not provided attempt to extract from config.yml
     if (!args.themeDev) {
     }
@@ -74,8 +80,10 @@ export const handler = async (args: any) => {
     const branchName = getBranchTitle(ticketIdentifier, args.title, branchType);
 
     const feature: Feature = {
+      title: args.title,
       ticket: {
         id: args.id,
+        projectIdentifier: ticketIdentifier,
       },
       themes: {
         dev: themeDev,
@@ -91,9 +99,10 @@ export const handler = async (args: any) => {
     };
 
     db.get("features").push(feature).write();
-
-    console.log("feature", feature);
+    spinner.succeed("Created new feature\n");
+    displayFeatures([feature]);
   } catch (error) {
-    console.error(error);
+    spinner.fail("Creating new feature\n");
+    console.error(chalk.redBright("Error: "), error);
   }
 };
