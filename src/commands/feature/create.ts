@@ -1,6 +1,6 @@
-import isEmpty from "lodash.isempty";
-import chalk from "chalk";
 import ora from "ora";
+import chalk from "chalk";
+import isEmpty from "lodash.isempty";
 
 import { Feature, Config } from "../../types";
 import { getConfig } from "../../config";
