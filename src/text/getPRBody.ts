@@ -41,19 +41,6 @@ const withFooter = (body: string): string => `${body}
 **Notes**: 
 `;
 
-const withPRTitle = (
-  ticketID: string,
-  branchType: string,
-  prTitle: string
-): Function => (body: string): string => {
-  return `${body}
-
-${
-  branchType.charAt(0).toUpperCase() + branchType.slice(1)
-} | ${ticketID} | ${prTitle}
-`;
-};
-
 const withJiraTicket = (
   ticketID: string,
   jiraBaseURL: string,
@@ -92,5 +79,4 @@ export default (
       prodThemeID
     ),
     withFooter
-    // withPRTitle(ticketID, branchType, prTitle)
   )("**Links:**");
