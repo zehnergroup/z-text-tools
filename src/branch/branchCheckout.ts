@@ -1,3 +1,4 @@
+import ora from "ora";
 import { Feature, Config } from "../types";
 
 import localGit from "../git/localGit";
@@ -24,21 +25,21 @@ export default async (
     await git.checkout(baseBranch || "development");
 
     status = await git.status();
-    console.log(`Switched to ${status.current || "undefined"} branch`);
+    ora(`Switched to ${status.current || "undefined"} branch`).succeed();
 
     const branches = await git.branch();
     if (branchName && branches.all.indexOf(branchName) === -1) {
       await git.checkoutLocalBranch(branchName);
       status = await git.status();
-      console.log(
+      ora(
         `Created and switched to ${status.current || "undefined"} branch`
-      );
+      ).succeed();
     } else {
       branchName && (await git.checkout(branchName));
       status = await git.status();
-      console.log(`Switched to ${status.current || "undefined"} branch`);
+      ora(`Switched to ${status.current || "undefined"} branch`).succeed();
     }
   } catch (error) {
-    console.log(error);
+    return Promise.reject(error);
   }
 };
