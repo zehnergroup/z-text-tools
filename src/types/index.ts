@@ -15,6 +15,7 @@ export type Branch = {
 
 export type Ticket = {
   id: string;
+  projectIdentifier: string;
 };
 
 export type Themes = {
@@ -60,6 +61,7 @@ export type Config = {
 };
 
 export type Feature = {
+  title: string;
   ticket: Ticket;
   themes: Themes;
   branch: Branch;
