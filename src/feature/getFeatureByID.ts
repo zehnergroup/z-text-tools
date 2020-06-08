@@ -2,9 +2,12 @@ import getDBAdapter from "../db/getDBAdapter";
 import isEmpty from "lodash.isempty";
 import { Feature } from "../types";
 
-export default async (id: number): Promise<Feature | null> => {
+export default async (
+  workingDirectory: string,
+  id: number
+): Promise<Feature | null> => {
   try {
-    const db = await getDBAdapter();
+    const db = await getDBAdapter(workingDirectory);
     const feature: Feature = db
       .get("features")
       .find({ ticket: { id: id } })
