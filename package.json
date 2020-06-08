@@ -41,6 +41,7 @@
   "dependencies": {
     "@octokit/rest": "^17.3.0",
     "chalk": "^4.0.0",
+    "cli-table3": "^0.6.0",
     "js-yaml": "^3.13.1",
     "lodash.isempty": "^4.4.0",
     "lowdb": "^1.0.0",
