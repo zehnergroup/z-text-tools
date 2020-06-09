@@ -12,7 +12,9 @@ export default async (workingDirectory: string): Promise<Feature | null> => {
       return Promise.reject(new Error(errors.featureCheckout));
     }
 
-    return Promise.resolve(await getFeatureByID(workingDirectory, currentFeatureID));
+    return Promise.resolve(
+      await getFeatureByID(workingDirectory, currentFeatureID)
+    );
   } catch (error) {
     return Promise.reject(error);
   }
