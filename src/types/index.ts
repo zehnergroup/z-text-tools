@@ -14,7 +14,7 @@ export type Branch = {
 };
 
 export type Ticket = {
-  id: string;
+  id: number;
   projectIdentifier: string;
 };
 
