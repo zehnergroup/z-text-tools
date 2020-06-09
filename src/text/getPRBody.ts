@@ -42,7 +42,7 @@ const withFooter = (body: string): string => `${body}
 `;
 
 const withJiraTicket = (
-  ticketID: string,
+  ticketID: number,
   jiraBaseURL: string,
   jiraPrefix: string
 ): Function => (body: string): string => {
@@ -52,7 +52,7 @@ const withJiraTicket = (
 };
 
 export default (
-  ticketID: string,
+  ticketID: number,
   shopifyDevBaseURL: string,
   shopifyProdBaseURL: string,
   devThemeID: number | "",
