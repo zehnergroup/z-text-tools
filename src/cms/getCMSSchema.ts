@@ -1,13 +1,16 @@
 import fs from "fs";
 import path from "path";
-import errors from "./errors";
+import errors from "../errors";
 
 const innerPath = "src/sections";
 const fsPromises = fs.promises;
 
-export default async (workingDirectory: string, fileName: string): Promise<any | Error> => {
+export default async (
+  workingDirectory: string,
+  fileName: string
+): Promise<any | Error> => {
   if (!workingDirectory || !fs.existsSync(workingDirectory)) {
-    return Promise.reject(new Error(errors.workingDirectory));
+    return Promise.reject(new Error(errors.workingDirectory(workingDirectory)));
   }
 
   // check config.yml
