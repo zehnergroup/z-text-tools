@@ -1,22 +1,22 @@
 import getCMSSchema from "./getCMSSchema";
 import replaceCMSSchema from "./replaceCMSSchema";
-import getBlock from "./text/getBlock";
-
-const blockType = "card_carousel";
+import getBlock from "../text/getBlock";
 
 export default async (
   workingDirectory: string,
-  fileName: string
+  fileName: string,
+  blockType: string,
+  blockTemplateFilename: string,
+  timesRepeat: number
 ): Promise<void> => {
   const CMSSchema = await getCMSSchema(workingDirectory, fileName);
   const blocks = CMSSchema.blocks;
 
-  // console.log(CMSSchema);
   const blocksUpdated =
     Array.isArray &&
     blocks.map((bl: any) => {
       if (bl.type === blockType) {
-        return getBlock();
+        return getBlock(blockTemplateFilename, timesRepeat);
       }
       return bl;
     });
