@@ -1,9 +1,7 @@
 import getBlockSettings from "./getBlockSettings";
 
-const initBlock = {
-  type: "card_carousel",
-  name: "Card Carousel",
-  settings: getBlockSettings(15),
-};
-
-export default (): any => initBlock;
+export default (blockTemplate: any, timesRepeat: number): any => ({
+  type: blockTemplate.type,
+  name: blockTemplate.name,
+  settings: getBlockSettings(blockTemplate, timesRepeat),
+});
