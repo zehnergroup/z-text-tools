@@ -16,4 +16,6 @@ export default {
   featureCheckout:
     "No feature has been checked out. Run feature --id=<featureID> to select a feature.",
   branchName: "No branch name provided",
+  blockTemplate: (blockTemplate: string) =>
+    `Block Template ${blockTemplate} does not exist in the working directory`,
 };
