@@ -1,68 +1,47 @@
-const initSettings = [
-  {
-    type: "header",
-    content: "Header",
-  },
-  {
-    type: "text",
-    id: "title",
-    label: "Title",
-  },
-];
+const interpolateStringWithIndex = (indexNumber: number) => (
+  str: string
+): string => str.replace(/{{i}}/gm, indexNumber + "");
 
-const getIndexedSettings = (index: number): object[] => [
-  {
-    type: "header",
-    content: `Dog ${index + 1}`,
-  },
-  {
-    type: "text",
-    id: `dog_name_${index + 1}`,
-    label: "Name",
-  },
-  {
-    type: "text",
-    id: `dog_title_${index + 1}`,
-    label: "Title",
-  },
-  {
-    type: "textarea",
-    id: `dog_bio_${index + 1}`,
-    label: "Bio",
-  },
-  {
-    type: "image_picker",
-    id: `dog_image_${index + 1}`,
-    label: "Image",
-    info: "Dimensions (460 x 340). Image is required.",
-  },
-  {
-    type: "select",
-    id: `dog_bg_${index + 1}`,
-    label: "Background Color",
-    options: [
-      { value: "white", label: "White" },
-      { value: "rust", label: "Rust (Orange)" },
-      { value: "cream", label: "Cream" },
-      { value: "crimson", label: "Crimson" },
-      { value: "cupid", label: "Cupid (Pink)" },
-      { value: "fern", label: "Fern (Light Green)" },
-      { value: "sun", label: "Sun" },
-      { value: "malibu", label: "Malibu (Light Blue)" },
-    ],
-    default: "cream",
-  },
-];
+const interpolaterepeatedSettings = (indexNumber: number) => (
+  repeatedSettings: object[]
+) =>
+  repeatedSettings.map((settingsObj: any) =>
+    Object.entries(settingsObj).reduce(
+      (updSettingsObj: object, entry: any[]) => ({
+        ...updSettingsObj,
+        [entry[0]]:
+          typeof entry[1] === "string"
+            ? interpolateStringWithIndex(indexNumber)(entry[1])
+            : entry[1],
+      }),
+      {}
+    )
+  );
 
-export default (numIndexedBlocks: number): object[] => [
-  ...initSettings,
-  ...(() => {
-    let settings: object[] = [];
+export default (blockTemplate: any, timesRepeat: number): object[] => {
+  return [
+    ...(() => [...(blockTemplate.commonSettings || [])])(),
+    ...(() => {
+      let settings: object[] = [];
 
-    for (let i = 0; i < numIndexedBlocks; i++) {
-      settings = [...settings, ...getIndexedSettings(i)];
-    }
+      for (let i = 0; i < timesRepeat; i++) {
+        settings = [
+          ...settings,
+          ...interpolaterepeatedSettings(i + 1)(blockTemplate.repeatedSettings)
+            .filter(
+              (settingsObj: any) =>
+                typeof settingsObj.stopIndex !== "number" ||
+                i <= settingsObj.stopIndex
+            ) // remove object beyond the stop index
+            .map((settingsObj: any) =>
+              typeof settingsObj.stopIndex === "number"
+                ? delete settingsObj.stopIndex && settingsObj
+                : settingsObj
+            ),
+        ];
+      }
 
-    return settings;
-  })(),
-];
+      return settings;
+    })(),
+  ];
+};
