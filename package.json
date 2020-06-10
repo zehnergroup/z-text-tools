@@ -1,8 +1,8 @@
 {
   "name": "@zehnergroup/z-text-tools",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Helper Tools For Theme Development",
-  "main": "index.js",
+  "main": "z-tools.js",
   "preferGlobal": true,
   "bin": {
     "z-tools": "bin/z-tools.js"
