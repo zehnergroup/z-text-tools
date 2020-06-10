@@ -1,0 +1,20 @@
+{
+  "urls": {
+    "jira": {
+      "prefix": "/browse",
+      "base": "https://zehnergroup.atlassian.net",
+      "projectPrefix": "SM"
+    },
+    "shopify": {
+      "hash": "#/pages/cms",
+      "editor": "/editor"
+    }
+  },
+  "github": {
+    "token": "<github token>",
+    "repo": "theme-repo",
+    "owner": "zehnergroup",
+    "baseBranch": "develop"
+  },
+  "author": "Bruce Wayne"
+}
