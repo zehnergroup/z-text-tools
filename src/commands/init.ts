@@ -1,11 +1,9 @@
-import isEmpty from "lodash.isempty";
 import ora from "ora";
 import chalk from "chalk";
 
-import { Config } from "../types";
-import { getConfig } from "../config";
 import getDBAdapter from "../db/getDBAdapter";
 import getWorkingDirectory from "../workingDirectory/getWorkingDirectory";
+import getConfigFromDB from "../db/getConfigFromDB";
 
 export const command = "init";
 export const desc = "Initalizes Z-Tools in working directory";
@@ -17,12 +15,7 @@ export const handler = async (argv: any) => {
   ).start();
   try {
     const db = await getDBAdapter(workingDirectory);
-    const config: Config = db.get("config").value();
-
-    if (isEmpty(config)) {
-      const _config: Config = await getConfig(workingDirectory);
-      await db.set("config", _config).write();
-    }
+    await getConfigFromDB(workingDirectory, db);
     ora(`Created texttoolsdb.json`).start().succeed();
     // TODO update .gitignore
     spinnerWD.succeed(

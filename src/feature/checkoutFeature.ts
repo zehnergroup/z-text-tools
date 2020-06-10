@@ -7,6 +7,7 @@ import errors from "../errors";
 import writeYMLThemeIDs from "../config/writeYMLThemeIDs";
 import getDBAdapter from "../db/getDBAdapter";
 import branchCheckout from "../branch/branchCheckout";
+import getConfigFromDB from "../db/getConfigFromDB";
 
 export default async (workingDirectory: string, id: number): Promise<void> => {
   try {
@@ -31,7 +32,7 @@ export default async (workingDirectory: string, id: number): Promise<void> => {
     db.set("currentFeature", id).write();
     ora(`Set current feature to ${projectIdentifier}`).succeed();
 
-    const config: Config = db.get("config").value();
+    const config: Config = await getConfigFromDB(workingDirectory, db);
     // checkout feature branch
     await branchCheckout(workingDirectory, feature, config);
 
