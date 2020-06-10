@@ -8,21 +8,11 @@
     "z-tools": "bin/z-tools.js"
   },
   "scripts": {
+    "build": "tsc && echo \"Build finished successfully\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc && node ./dist/index.js",
-    "branch": "tsc && node ./dist/branch.js",
-    "branch-push": "tsc && node ./dist/branchPush.js",
-    "pr": "tsc && node ./dist/pr.js",
+    "start": "tsc && node ./dist/z-tools.js",
     "z-tools": "tsc && node ./dist/z-tools.js",
-    "init": "tsc && node ./dist/init.js",
-    "feature": "tsc && node ./dist/feature.js",
-    "feature-create": "tsc && node ./dist/featureCreate.js",
-    "watch-init": "tsc-watch --onSuccess \"node ./dist/init.js\"",
-    "watch-feature-create": "tsc-watch --onSuccess \"node ./dist/featureCreate.js -- help\"",
-    "watch-feature": "tsc-watch --onSuccess \"node ./dist/feature.js --id=100\"",
-    "watch-z-tools": "tsc-watch --onSuccess \"node ./dist/z-tools.js\"",
-    "watch-cms-settings": "tsc-watch --onSuccess \"node ./dist/cmsSettings.js\"",
-    "watch": "tsc-watch --onSuccess \"node ./dist/index.js\""
+    "watch-z-tools": "tsc-watch --onSuccess \"node ./dist/z-tools.js\""
   },
   "repository": {
     "type": "git",
