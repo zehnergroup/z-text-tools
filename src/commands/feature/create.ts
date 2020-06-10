@@ -1,9 +1,7 @@
 import ora from "ora";
 import chalk from "chalk";
-import isEmpty from "lodash.isempty";
 
 import { Feature, Config } from "../../types";
-import { getConfig } from "../../config";
 import getPRTitle from "../../text/getPRTitle";
 import getTicketIdentifier from "../../text/getTicketIdentifier";
 import { getBranchTitle } from "../../text";
@@ -11,6 +9,7 @@ import { displayFeatures } from "../../tables";
 
 import getDBAdapter from "../../db/getDBAdapter";
 import getWorkingDirectory from "../../workingDirectory/getWorkingDirectory";
+import getConfigFromDB from "../../db/getConfigFromDB";
 
 export const command = "create";
 export const desc = "Create new feature";
@@ -41,14 +40,8 @@ export const handler = async (args: any) => {
   try {
     const workingDirectory = await getWorkingDirectory(args);
     const db = await getDBAdapter(workingDirectory);
-    let config: Config = db.get("config").value();
-
-    // create config, if not  created
-    if (isEmpty(config)) {
-      const _config: Config = await getConfig(workingDirectory);
-      db.set("config", _config).write();
-      config = db.get("config").value();
-    }
+    const config: Config = await getConfigFromDB(workingDirectory, db);
+    const currentFeatureID: number | null = db.get("currentFeature").value();
 
     const {
       urls: {
@@ -100,7 +93,7 @@ export const handler = async (args: any) => {
 
     db.get("features").push(feature).write();
     spinner.succeed("Created new feature\n");
-    displayFeatures([feature]);
+    displayFeatures([feature], currentFeatureID);
   } catch (error) {
     spinner.fail("Creating new feature\n");
     console.error(chalk.redBright("Error: "), error);
