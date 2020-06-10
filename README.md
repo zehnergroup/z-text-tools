@@ -1,40 +1,73 @@
 ## Overview
 
-- Toolset to automate tasks around Z-Theme development including:
-  - Maintaining consistent naming convetion across theme on prod and dev stores
-  - Following [Zehner Git Style](https://www.notion.so/Git-Style-Guide-Commits-Branch-Names-032b21ffe7ac4a0ca580a7b68d9b5d9e)
+- CLI tool to automate tasks around Z-Theme development. It allows you to:
+  - Maintain consistent naming convetion across themes on prod and dev stores
+  - Create, checkout, push to remove feature branches following [Zehner Git Style](https://www.notion.so/Git-Style-Guide-Commits-Branch-Names-032b21ffe7ac4a0ca580a7b68d9b5d9e)
+  - Open Pull Requests prepopulated with feature links (Jira ticket and themes links) and titled following [Zehner Git Style](https://www.notion.so/Git-Style-Guide-Commits-Branch-Names-032b21ffe7ac4a0ca580a7b68d9b5d9e)
+  - Generate, watch CMS blocks and pages - in progress
+  - Switch between themes and runing theme kit - in progress
 
----
+--
 
-## What It Does:
+## Requirements
 
-- You provide ticket number, PR title, branch type and DEV and PROD themes ids
-- `npm run start` - creates `text-out` folder with subfolders indexed by the ticket number containing text files for theme name, `config.yml` reference comment, PR preformatted text with links
-- `npm run branch` - creates new branch following [Zehner Git Style](https://www.notion.so/Git-Style-Guide-Commits-Branch-Names-032b21ffe7ac4a0ca580a7b68d9b5d9e), for example: `feature/PROJ-11/feature-title`
-- `npm run branch-push` - pushes created branch to a provided repo
-- `npm run pr` - creates pull request following [Zehner Git Style](https://www.notion.so/Git-Style-Guide-Commits-Branch-Names-032b21ffe7ac4a0ca580a7b68d9b5d9e) with your ticket, development themes and links, for example following pull request titled **"Feature | PROJ-11 | Feature Title"**:
+- [Node.js Version 12 and higher](https://nodejs.org/en/download/). Use [NVM](https://github.com/nvm-sh/nvm) to switch between versions.
+- If you want to use `z-tools branch push` and `z-tools pr` commands to access your project repository and open pull requests, you will need a personal access token. Follow [these instructions](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) to get your token.
 
-```md
-**Links:**
+--
 
-- Jira Ticket: https://zehnergroup.atlassian.net/browse/PROJ-11
+## Installation
 
-- CMS preview URL:
-  - DEV: https://z-project-dev.myshopify.com/admin/themes/80732979284/editor
-  - PROD: https://z-project.myshopify.com/admin/themes/80843374626/editor
+### Install `z-tools` in your system
 
-**Verify:**
+1.  Clone [Z-Tools repo](https://github.com/zehnergroup/z-text-tools)
+2.  **Inside** `z-text-tools` folder run:
 
-- [ ] Page matches designs (desktop + responsive)
-- [ ] All Theme Editor option variations behave correctly (eg. alignment, content variations, how modules work with AND without content populated)
-
-**Notes**:
+```
+npm install -g
 ```
 
----
+3. Anywhere in your system check `z-tools` is available. If you're using multiple npm versions, you may need to run nvm with Node.js 12+ like so `nvm use 12.16.2`
 
-## Setup
+```
+z-tools --version
+```
 
-- Provide path to your theme working directory in `config.json` (see [Example Config](config.sample.json) )
-- **Inside** your theme / project folder create 2 config files:
-  - `texttoolsconfig.json` - global config that you can set at the beginning
+### Setup your project
+
+1. **Inside** your theme / project folder create a config file:
+
+- `texttoolsconfig.json` - global config, set once per project. See `texttoolsconfig.sample.json`
+
+2. Run:
+
+```
+z-tools init
+```
+
+--
+
+## Usage
+
+Every command is self-documented by the tool. Run `z-tools <command> --help` for details about using a command.
+
+```
+Usage:
+z-tools <command> [args]
+
+Commands:
+  z-tools branch      Create, checkout, push to remote a feature branch
+  z-tools checkout    Checkout feature
+  z-tools cms         Generate, update and watch cms pages schemas and blocks
+  z-tools feature     Create, list, checkout features
+  z-tools init        Initalizes Z-Tools in working directory
+  z-tools pr          Create pull request from the context of current feature
+  z-tools status      Print current status
+  z-tools text-tools  Run available text tools and save output in "text-tools-out" folder
+
+Options:
+  --help      Show help for a command                                                                                                                                                                                                                                                                                       [boolean]
+  --version   Show version number                                                                                                                                                                                                                                                                                           [boolean]
+  --path, -p  Explicitly set a working directory
+
+```
