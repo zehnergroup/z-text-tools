@@ -13,18 +13,18 @@ export default async (feature: Feature, config: Config): Promise<void> => {
     } = config;
 
     const {
-      ticket: { id: ticketID },
+      ticket: { projectIdentifier },
       themes: { dev: devThemeID, prod: prodThemeID },
       pr: { title: prTitle },
       branch: { name: branchName },
     } = feature;
 
     const prBody = getPRBody(
-      ticketID,
+      projectIdentifier,
       config.urls.shopify.base.dev,
       config.urls.shopify.base.prod,
-      devThemeID || "",
-      prodThemeID || "",
+      devThemeID,
+      prodThemeID,
       config.urls.jira.base,
       config.urls.jira.prefix || "",
       config.urls.shopify.editor,
