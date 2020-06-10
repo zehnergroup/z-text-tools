@@ -26,8 +26,16 @@ export const arrayWithColor = (arr: string[], color: string): string[] => {
   return isFunction(fn) ? arr.map((elem: string) => fn(elem)) : arr;
 };
 
-export const displayFeatures = (features: Feature[]) => {
-  const headArray: string[] = ["Ticket Identifier", "Branch Name", "PR Title"];
+export const displayFeatures = (
+  features: Feature[],
+  currentFeatureID: number | null
+) => {
+  const headArray: string[] = [
+    "Current",
+    "Ticket Identifier",
+    "Branch Name",
+    "PR Title",
+  ];
   let table = new Table({
     head: arrayWithColor(headArray, "cyanBright"),
     chars: tableChars,
@@ -35,6 +43,7 @@ export const displayFeatures = (features: Feature[]) => {
 
   features.forEach((feature: Feature) => {
     const row = [
+      feature.ticket.id === currentFeatureID ? chalk.cyanBright("*") : "",
       feature.ticket.projectIdentifier,
       feature.branch.name || "",
       feature.pr.title,
