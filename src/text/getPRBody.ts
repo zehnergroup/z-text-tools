@@ -1,24 +1,58 @@
 import { pipe } from "../utils";
 
+const getStorePreviewURL = (
+  label: string = "DEV",
+  baseURL: string,
+  themeID?: number
+): string | null =>
+  themeID
+    ? `- ${label.toUpperCase()}: ${baseURL}/?preview_theme_id=${themeID}`
+    : null;
+
 const withCMSPreviewURLs = (
   shopifyDevBaseURL: string,
   shopifyProdBaseURL: string,
-  devThemeID: string,
-  prodThemeID: string,
+  devThemeID: number | undefined,
+  prodThemeID: number | undefined,
   shopifyEditorSuffix?: string,
   shopifyHash?: string
 ): Function => (body: string): string => {
-  const themeSuffix = "/admin/themes";
+  const themeSuffix = "admin/themes";
 
   return `${body}
 - CMS preview URL: 
-  - DEV: ${shopifyDevBaseURL}${themeSuffix}/${devThemeID}${
+  - DEV: ${shopifyDevBaseURL}/${themeSuffix}/${devThemeID || ""}${
     shopifyEditorSuffix || ""
   }${shopifyHash || ""}
-  - PROD: ${shopifyProdBaseURL}${themeSuffix}/${prodThemeID}${
+  - PROD: ${shopifyProdBaseURL}/${themeSuffix}/${prodThemeID || ""}${
     shopifyEditorSuffix || ""
   }${shopifyHash || ""}
 `;
+};
+
+const withStorePreviewURLs = (
+  shopifyDevBaseURL: string,
+  shopifyProdBaseURL: string,
+  devThemeID?: number,
+  prodThemeID?: number
+): Function => (body: string): string => {
+  if (!devThemeID && !prodThemeID) return body;
+
+  const devThemePreview = getStorePreviewURL(
+    "DEV",
+    shopifyDevBaseURL,
+    devThemeID
+  );
+  const prodThemePreview = getStorePreviewURL(
+    "PROD",
+    shopifyProdBaseURL,
+    prodThemeID
+  );
+  return `${body}
+- Store preview URL: 
+  ${devThemePreview}
+  ${prodThemePreview}
+  `;
 };
 
 const withFooter = (body: string): string => `${body}
@@ -30,48 +64,42 @@ const withFooter = (body: string): string => `${body}
 **Notes**: 
 `;
 
-const withPRTitle = (
-  ticketID: string,
-  branchType: string,
-  prTitle: string
-): Function => (body: string): string => {
-  return `${body}
-
-${
-  branchType.charAt(0).toUpperCase() + branchType.slice(1)
-} | ${ticketID} | ${prTitle}
-`;
-};
-
 const withJiraTicket = (
-  ticketID: string,
+  projectIdentifier: string,
   jiraBaseURL: string,
   jiraPrefix: string
 ): Function => (body: string): string => {
   return `${body}
-- Jira Ticket: ${jiraBaseURL}${jiraPrefix}/${ticketID}
+- Jira Ticket: ${jiraBaseURL}${jiraPrefix}/${projectIdentifier}
 `;
 };
 
 export default (
-  ticketID: string,
+  projectIdentifier: string,
   shopifyDevBaseURL: string,
   shopifyProdBaseURL: string,
-  devThemeID: string,
-  prodThemeID: string,
+  devThemeID: number | undefined,
+  prodThemeID: number | undefined,
   jiraBaseURL: string,
   jiraPrefix: string,
-  branchType: string,
-  prTitle: string
+  shopifyEditorSuffix?: string,
+  shopifyHash?: string
 ) =>
   pipe(
-    withJiraTicket(ticketID, jiraBaseURL, jiraPrefix),
+    withJiraTicket(projectIdentifier, jiraBaseURL, jiraPrefix),
     withCMSPreviewURLs(
+      shopifyDevBaseURL,
+      shopifyProdBaseURL,
+      devThemeID,
+      prodThemeID,
+      shopifyEditorSuffix,
+      shopifyHash
+    ),
+    withStorePreviewURLs(
       shopifyDevBaseURL,
       shopifyProdBaseURL,
       devThemeID,
       prodThemeID
     ),
     withFooter
-    // withPRTitle(ticketID, branchType, prTitle)
   )("**Links:**");

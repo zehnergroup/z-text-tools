@@ -1,61 +1,19 @@
 import fs from "fs";
 import path from "path";
 import errors from "../errors";
-import getConfigYML, { ConfigYML } from "./getConfigYML";
+import { Config, ConfigYML } from "../types";
+
+import getConfigYML from "./getConfigYML";
 import { getProperty, pipe } from "../utils";
 
 const fsPromises = fs.promises;
 
 const FILE_NAMES = {
   textToolsConfig: "texttoolsconfig.json",
-  textToolsPR: "texttoolspr.json",
 };
 
 const URL_PROPS = {
   protocol: "https",
-};
-
-export type ConfigURLs = {
-  jira: {
-    prefix?: string;
-    base: string;
-  };
-  shopify: {
-    hash?: string;
-    editor?: string;
-    base: {
-      dev: string;
-      prod: string;
-    };
-  };
-};
-
-/***
- * Config Type
- * ================================
- */
-export type Config = {
-  workingDirectory: string;
-  urls: ConfigURLs;
-  ticket: {
-    id: string;
-  };
-  themes: {
-    dev: string;
-    prod: string;
-  };
-  branch: {
-    type: string;
-  };
-  pr: {
-    title: string;
-  };
-  author?: string;
-  github: {
-    repo: string;
-    owner: string;
-    token?: string;
-  };
 };
 
 // TODO create type/interface TextToolsConfig
@@ -71,10 +29,10 @@ const withStoreURLs = (
       ...textToolsShopifyURLs,
       base: {
         dev:
-          `${URL_PROPS.protocol}//${configYML.development.store}` ||
+          `${URL_PROPS.protocol}://${configYML.development.store}` ||
           textToolsBaseURLs.dev,
         prod:
-          `${URL_PROPS.protocol}//${configYML.production.store}` ||
+          `${URL_PROPS.protocol}://${configYML.production.store}` ||
           textToolsBaseURLs.prod,
       },
     },
@@ -85,16 +43,10 @@ const withStoreURLs = (
  * Resolves merged config:Config
  * from provided workingDirectory path
  */
-export const getConfig = async (): Promise<Config> => {
+export const getConfig = async (workingDirectory: string): Promise<Config> => {
   try {
-    const conf = require("../../config.json");
-    const workingDirectory = conf.workingDirectory;
-    if (!workingDirectory || !fs.existsSync(workingDirectory)) {
-      return Promise.reject(new Error(errors.workingDirectory));
-    }
-
     // get config.yml
-    const configYML: ConfigYML = await getConfigYML();
+    const configYML: ConfigYML = await getConfigYML(workingDirectory);
 
     // check texttoolsconfig.json
     const textToolsConfigPath = path.join(
@@ -112,19 +64,8 @@ export const getConfig = async (): Promise<Config> => {
 
     const textToolsCofig = JSON.parse(textToolsCofigBuf.toString());
 
-    // check texttoolspr.json
-    const textToolsPRPath = path.join(workingDirectory, FILE_NAMES.textToolsPR);
-    if (!fs.existsSync(textToolsPRPath)) {
-      return Promise.reject(errors.textToolsPR);
-    }
-
-    const textToolsPRBuf = await fsPromises.readFile(textToolsPRPath, "UTF-8");
-    const textToolsPR = JSON.parse(textToolsPRBuf.toString());
-
     return Promise.resolve({
-      workingDirectory,
       ...textToolsCofig,
-      ...textToolsPR,
       urls: pipe(
         withStoreURLs(
           configYML,

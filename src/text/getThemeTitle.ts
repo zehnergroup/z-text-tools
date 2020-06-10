@@ -1,5 +1,5 @@
 export default (
   ticketID: string,
-  prTitle: string,
+  featureTitle: string,
   author: string = ""
-): string => `[${ticketID}] - ${prTitle} - (${author})`;
+): string => `[${ticketID}] - ${featureTitle} - (${author})`;
