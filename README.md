@@ -7,14 +7,14 @@
   - Generate, watch CMS blocks and pages - in progress
   - Switch between themes and runing theme kit - in progress
 
---
+---
 
 ## Requirements
 
 - [Node.js Version 12 and higher](https://nodejs.org/en/download/). Use [NVM](https://github.com/nvm-sh/nvm) to switch between versions.
 - If you want to use `z-tools branch push` and `z-tools pr` commands to access your project repository and open pull requests, you will need a personal access token. Follow [these instructions](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) to get your token.
 
---
+---
 
 ## Installation
 
@@ -45,7 +45,7 @@ z-tools --version
 z-tools init
 ```
 
---
+---
 
 ## Usage
 
