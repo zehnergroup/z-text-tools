@@ -6,7 +6,7 @@ import getDBAdapter from "../../db/getDBAdapter";
 import getWorkingDirectory from "../../workingDirectory/getWorkingDirectory";
 
 export const command = "list";
-export const desc = "List Exisitng Feature";
+export const desc = "List existing features";
 
 export const handler = async (args: any) => {
   try {
@@ -20,7 +20,7 @@ export const handler = async (args: any) => {
       );
       console.log(`Use ${chalk.cyanBright("z-tools")} feature create <args>\n`);
     } else {
-      displayFeatures(features);
+      displayFeatures(features, db.get("currentFeature").value());
     }
   } catch (error) {
     console.error(chalk.redBright("Error: "), error);
