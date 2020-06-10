@@ -41,7 +41,7 @@ export default async (
       );
 
       await fsPromises.writeFile(configYMLPath, configUPD);
-      console.log(`Updated config.yml with ${ymlComment} comment`);
+      console.log(`Updated config.yml with ${ymlComment}`);
     }
   } catch (error) {
     Promise.reject(error);
