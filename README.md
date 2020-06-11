@@ -24,7 +24,9 @@
 2.  **Inside** `z-text-tools` folder run:
 
 ```
-npm install -g
+$ npm install
+$ npm run build
+$ npm install -g
 ```
 
 3. Anywhere in your system check `z-tools` is available. If you're using multiple npm versions, you may need to run nvm with Node.js 12+ like so `nvm use 12.16.2`
