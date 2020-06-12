@@ -6,10 +6,16 @@ import { getPRBody } from "../text";
 import { Octokit } from "@octokit/rest";
 import errors from "../errors";
 
-export default async (feature: Feature, config: Config): Promise<void> => {
+export default async (feature: Feature, config: Config): Promise<any> => {
   try {
     const {
       github: { token: auth, repo, owner, baseBranch },
+      shopify: {
+        base: { dev: shopifyDevBase, prod: shopifyProdBase },
+        editor: shopifyEditor,
+        hash: shopifyHash,
+      },
+      jira: { base: jiraBase, prefix: jiraPrefix },
     } = config;
 
     const {
@@ -21,14 +27,14 @@ export default async (feature: Feature, config: Config): Promise<void> => {
 
     const prBody = getPRBody(
       projectIdentifier,
-      config.urls.shopify.base.dev,
-      config.urls.shopify.base.prod,
+      shopifyDevBase,
+      shopifyProdBase,
       devThemeID,
       prodThemeID,
-      config.urls.jira.base,
-      config.urls.jira.prefix || "",
-      config.urls.shopify.editor,
-      config.urls.shopify.hash
+      jiraBase,
+      jiraPrefix || "",
+      shopifyEditor,
+      shopifyHash
     );
 
     const octokit = new Octokit({
@@ -36,18 +42,19 @@ export default async (feature: Feature, config: Config): Promise<void> => {
     });
 
     if (branchName) {
-      await octokit.pulls.create({
-        owner,
-        repo,
-        base: baseBranch || "development",
-        head: branchName,
-        title: prTitle,
-        body: prBody,
-        draft: true,
-      });
-
+      const prData = (
+        await octokit.pulls.create({
+          owner,
+          repo,
+          base: baseBranch || "development",
+          head: branchName,
+          title: prTitle,
+          body: prBody,
+          draft: true,
+        })
+      ).data;
       ora(`Opened draft PR for ${branchName} in ${repo}`).succeed();
-      return Promise.resolve();
+      return Promise.resolve(prData);
     }
 
     return Promise.reject(errors.branchName);

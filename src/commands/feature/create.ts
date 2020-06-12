@@ -44,9 +44,7 @@ export const handler = async (args: any) => {
     const currentFeatureID: number | null = db.get("currentFeature").value();
 
     const {
-      urls: {
-        jira: { projectPrefix },
-      },
+      jira: { projectPrefix },
     } = config;
 
     const branchType = args.branchType || "feature";

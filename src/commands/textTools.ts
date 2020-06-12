@@ -27,6 +27,17 @@ export const handler = async (args: any) => {
     const feature: Feature | null = await getCurrentFeature(workingDirectory);
     const config: Config = await getConfigFromDB(workingDirectory, db);
 
+    const {
+      github: { token: auth, repo, owner, baseBranch },
+      shopify: {
+        base: { dev: shopifyDevBase, prod: shopifyProdBase },
+        editor: shopifyEditor,
+        hash: shopifyHash,
+      },
+      jira: { base: jiraBase, prefix: jiraPrefix },
+      author,
+    } = config;
+
     if (feature) {
       const {
         ticket: { projectIdentifier },
@@ -35,18 +46,16 @@ export const handler = async (args: any) => {
         title,
       } = feature;
 
-      const { author } = config;
-
       const prBody = getPRBody(
         projectIdentifier,
-        config.urls.shopify.base.dev,
-        config.urls.shopify.base.prod,
+        shopifyDevBase,
+        shopifyProdBase,
         devThemeID,
         prodThemeID,
-        config.urls.jira.base,
-        config.urls.jira.prefix || "",
-        config.urls.shopify.editor,
-        config.urls.shopify.hash
+        jiraBase,
+        jiraPrefix || "",
+        shopifyEditor,
+        shopifyHash
       );
 
       const themeName = getThemeTitle(projectIdentifier, title, author);

@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
 import errors from "../errors";
-import { Config, ConfigYML } from "../types";
+import { Config, YMLConfig } from "../types";
 
-import getConfigYML from "./getConfigYML";
+import getYMLConfig from "./getYMLConfig";
 import { getProperty, pipe } from "../utils";
 
 const fsPromises = fs.promises;
@@ -18,15 +18,15 @@ const URL_PROPS = {
 
 // TODO create type/interface TextToolsConfig
 const withStoreURLs = (
-  configYML: ConfigYML,
-  textToolsShopifyURLs: any = {}
+  configYML: YMLConfig,
+  textToolsShopifyConfig: any = {}
 ): Function => (configURLs: any) => {
-  const textToolsBaseURLs = textToolsShopifyURLs.base || {};
+  const textToolsBaseURLs = textToolsShopifyConfig.base || {};
 
   return {
     ...configURLs,
     shopify: {
-      ...textToolsShopifyURLs,
+      ...textToolsShopifyConfig,
       base: {
         dev:
           `${URL_PROPS.protocol}://${configYML.development.store}` ||
@@ -46,7 +46,7 @@ const withStoreURLs = (
 export const getConfig = async (workingDirectory: string): Promise<Config> => {
   try {
     // get config.yml
-    const configYML: ConfigYML = await getConfigYML(workingDirectory);
+    const configYML: YMLConfig = await getYMLConfig(workingDirectory);
 
     // check texttoolsconfig.json
     const textToolsConfigPath = path.join(
