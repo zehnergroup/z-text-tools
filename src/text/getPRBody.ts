@@ -1,13 +1,6 @@
 import { pipe } from "../utils";
-
-const getStorePreviewURL = (
-  label: string = "DEV",
-  baseURL: string,
-  themeID?: number
-): string | null =>
-  themeID
-    ? `- ${label.toUpperCase()}: ${baseURL}/?preview_theme_id=${themeID}`
-    : null;
+import getPreviewURL from "./getPreviewURL";
+import getCMSurl from "./getCMSurl";
 
 const withCMSPreviewURLs = (
   shopifyDevBaseURL: string,
@@ -17,16 +10,27 @@ const withCMSPreviewURLs = (
   shopifyEditorSuffix?: string,
   shopifyHash?: string
 ): Function => (body: string): string => {
-  const themeSuffix = "admin/themes";
+  const devThemeCMS = getCMSurl(
+    "DEV",
+    "admin/themes",
+    shopifyDevBaseURL,
+    shopifyEditorSuffix,
+    shopifyHash,
+    devThemeID
+  );
+  const prodThemeCMS = getCMSurl(
+    "PROD",
+    "admin/themes",
+    shopifyProdBaseURL,
+    shopifyEditorSuffix,
+    shopifyHash,
+    prodThemeID
+  );
 
   return `${body}
-- CMS preview URL: 
-  - DEV: ${shopifyDevBaseURL}/${themeSuffix}/${devThemeID || ""}${
-    shopifyEditorSuffix || ""
-  }${shopifyHash || ""}
-  - PROD: ${shopifyProdBaseURL}/${themeSuffix}/${prodThemeID || ""}${
-    shopifyEditorSuffix || ""
-  }${shopifyHash || ""}
+- CMS preview URLs: 
+  ${devThemeCMS || ""}
+  ${prodThemeCMS || ""}
 `;
 };
 
@@ -38,20 +42,16 @@ const withStorePreviewURLs = (
 ): Function => (body: string): string => {
   if (!devThemeID && !prodThemeID) return body;
 
-  const devThemePreview = getStorePreviewURL(
-    "DEV",
-    shopifyDevBaseURL,
-    devThemeID
-  );
-  const prodThemePreview = getStorePreviewURL(
+  const devThemePreview = getPreviewURL("DEV", shopifyDevBaseURL, devThemeID);
+  const prodThemePreview = getPreviewURL(
     "PROD",
     shopifyProdBaseURL,
     prodThemeID
   );
   return `${body}
-- Store preview URL: 
-  ${devThemePreview}
-  ${prodThemePreview}
+- Store preview URLs: 
+  ${devThemePreview || ""}
+  ${prodThemePreview || ""}
   `;
 };
 
