@@ -4,7 +4,6 @@ import errors from "../errors";
 import { Config, YMLConfig } from "../types";
 
 import getYMLConfig from "./getYMLConfig";
-import { getProperty, pipe } from "../utils";
 
 const fsPromises = fs.promises;
 
@@ -16,25 +15,27 @@ const URL_PROPS = {
   protocol: "https",
 };
 
-// TODO create type/interface TextToolsConfig
 const withStoreURLs = (
   configYML: YMLConfig,
   textToolsShopifyConfig: any = {}
-): Function => (configURLs: any) => {
+): Function => () => {
   const textToolsBaseURLs = textToolsShopifyConfig.base || {};
+  const dev =
+    configYML.development.store || textToolsBaseURLs.dev
+      ? `${URL_PROPS.protocol}://${configYML.development.store}` ||
+        textToolsBaseURLs.dev
+      : null;
+  const prod =
+    configYML.production.store || textToolsBaseURLs.prod
+      ? `${URL_PROPS.protocol}://${configYML.production.store}` ||
+        textToolsBaseURLs.prod
+      : null;
 
   return {
-    ...configURLs,
-    shopify: {
-      ...textToolsShopifyConfig,
-      base: {
-        dev:
-          `${URL_PROPS.protocol}://${configYML.development.store}` ||
-          textToolsBaseURLs.dev,
-        prod:
-          `${URL_PROPS.protocol}://${configYML.production.store}` ||
-          textToolsBaseURLs.prod,
-      },
+    ...textToolsShopifyConfig,
+    base: {
+      dev,
+      prod,
     },
   };
 };
@@ -62,16 +63,11 @@ export const getConfig = async (workingDirectory: string): Promise<Config> => {
       "UTF-8"
     );
 
-    const textToolsCofig = JSON.parse(textToolsCofigBuf.toString());
+    const textToolsConfig = JSON.parse(textToolsCofigBuf.toString());
 
     return Promise.resolve({
-      ...textToolsCofig,
-      urls: pipe(
-        withStoreURLs(
-          configYML,
-          getProperty(textToolsCofig)(["urls", "shopify"])
-        )
-      )(textToolsCofig.urls),
+      ...textToolsConfig,
+      shopify: withStoreURLs(configYML, textToolsConfig.shopify)(),
     });
   } catch (err) {
     return Promise.reject(err);
