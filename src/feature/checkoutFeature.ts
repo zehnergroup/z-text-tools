@@ -1,4 +1,3 @@
-import cp from "child_process";
 import ora from "ora";
 
 import { Feature, Config } from "../types";
@@ -8,12 +7,27 @@ import writeYMLThemeIDs from "../config/writeYMLThemeIDs";
 import getDBAdapter from "../db/getDBAdapter";
 import branchCheckout from "../branch/branchCheckout";
 import getConfigFromDB from "../db/getConfigFromDB";
+import getFeatureByBranchName from "./getFeatureByBranchName";
 
-export default async (workingDirectory: string, id: number): Promise<void> => {
+export default async (
+  workingDirectory: string,
+  id: number | null,
+  branchName?: string
+): Promise<void> => {
   try {
-    const feature: Feature | null = await getFeatureByID(workingDirectory, id);
+    if (!id && !branchName) {
+      return Promise.reject(
+        new Error("Please provide feature id or branch name")
+      );
+    }
+    const feature: Feature | null = id
+      ? await getFeatureByID(workingDirectory, id)
+      : branchName
+      ? await getFeatureByBranchName(workingDirectory, branchName)
+      : null;
+
     if (!feature) {
-      return Promise.reject(new Error(errors.feature(id)));
+      return Promise.reject(new Error(errors.feature(id || branchName || "")));
     }
 
     const {

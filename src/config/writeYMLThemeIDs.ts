@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
 import YAML from "yaml";
-import { ConfigYML } from "../types";
-import getConfigYMLDocument from "./getConfigYMLDocument";
+import { YMLConfig } from "../types";
+import getYMLConfigDocument from "./getYMLConfigDocument";
 
 const fsPromises = fs.promises;
 
@@ -15,12 +15,12 @@ export default async (
 ): Promise<void> => {
   try {
     // get config.yml
-    const configYMLDocument = await getConfigYMLDocument(workingDirectory);
-    const configYML: ConfigYML = configYMLDocument.toJSON();
+    const configYMLDocument = await getYMLConfigDocument(workingDirectory);
+    const configYML: YMLConfig = configYMLDocument.toJSON();
     const configYMLCommentBefore: string | null | undefined =
       configYMLDocument.commentBefore;
 
-    const configYMLUPD: ConfigYML = {
+    const configYMLUPD: YMLConfig = {
       ...configYML,
       development: {
         ...configYML.development,

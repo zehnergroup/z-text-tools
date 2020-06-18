@@ -21,23 +21,26 @@
   "author": "Ksenia Koldaeva",
   "license": "UNLICENSED",
   "devDependencies": {
-    "@types/node": "^13.11.1",
-    "@types/yargs": "^15.0.5",
-    "tsc-watch": "^4.2.3",
-    "typescript": "^3.8.3",
+    "@octokit/types": "^5.0.0",
     "@types/js-yaml": "^3.12.3",
     "@types/lodash.isempty": "^4.4.6",
-    "@types/lowdb": "^1.0.9"
+    "@types/lowdb": "^1.0.9",
+    "@types/node": "^13.11.1",
+    "@types/node-fetch": "^2.5.7",
+    "@types/yargs": "^15.0.5",
+    "tsc-watch": "^4.2.3",
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "@octokit/rest": "^17.3.0",
     "chalk": "^4.0.0",
     "cli-table3": "^0.6.0",
     "js-yaml": "^3.13.1",
+    "json-beautify": "^1.1.1",
     "lodash.isempty": "^4.4.0",
     "lowdb": "^1.0.0",
+    "node-fetch": "^2.6.0",
     "ora": "^4.0.4",
-    "json-beautify": "^1.1.1",
     "simple-git": "^1.132.0",
     "yaml": "^1.10.0",
     "yargs": "^15.3.1"

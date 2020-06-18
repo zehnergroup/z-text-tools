@@ -182,6 +182,9 @@ const splitString = (delimeter = "\n") => (str = "") => {
   return typeof str === "string" ? str.split(delimeter) : "";
 };
 
+const withProp = (value: any, key: string) => (obj: any): any =>
+  value ? { ...obj, [key]: value } : obj;
+
 export {
   areArraysOfIntsEqual,
   areKeysEqual,
@@ -199,4 +202,5 @@ export {
   parseFromLocalStorage,
   pipe,
   splitString,
+  withProp,
 };
