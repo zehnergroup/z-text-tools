@@ -3,7 +3,7 @@ type ThemeConfig = {
   store?: string;
 };
 
-export type ConfigYML = {
+export type YMLConfig = {
   development: ThemeConfig;
   production: ThemeConfig;
 };
@@ -25,16 +25,18 @@ export type Themes = {
 
 export type PR = {
   title: string;
+  url?: string;
+  number?: number;
 };
 
-export type ConfigGithub = {
+export type GithubConfig = {
   repo: string;
   owner: string;
   token?: string;
   baseBranch?: string;
 };
 
-export type ShopifyURLs = {
+export type ShopifyConfig = {
   hash?: string;
   editor?: string;
   base: {
@@ -43,21 +45,19 @@ export type ShopifyURLs = {
   };
 };
 
-export type JiraURLs = {
+export type JiraConfig = {
   projectPrefix?: string;
   prefix?: string;
   base: string;
-};
-
-export type ConfigURLs = {
-  jira: JiraURLs;
-  shopify: ShopifyURLs;
+  email: string;
+  token: string;
 };
 
 export type Config = {
-  urls: ConfigURLs;
+  jira: JiraConfig;
+  shopify: ShopifyConfig;
   author?: string;
-  github: ConfigGithub;
+  github: GithubConfig;
 };
 
 export type Feature = {
