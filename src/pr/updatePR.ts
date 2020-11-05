@@ -14,7 +14,8 @@ export default async (workingDirectory: string, newPR: PR): Promise<void> => {
     await db
       .get("features")
       .find({ ticket: { id: currentFeatureID } })
-      .update("pr", (oldPR) => ({ ...oldPR, ...newPR }));
+      .update("pr", (oldPR) => ({ ...oldPR, ...newPR }))
+      .write();
 
     return Promise.resolve();
   } catch (error) {
