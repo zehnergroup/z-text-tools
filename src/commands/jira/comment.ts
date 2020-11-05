@@ -39,7 +39,7 @@ export const handler = async (argv: any) => {
       console.log(`URL: ${chalk.cyanBright(parsed.self)}`);
     }
   } catch (error) {
-    spinner.fail("Creating new feature\n");
+    spinner.fail("Creating Jira comment\n");
     console.error(chalk.redBright("Error: "), error);
   }
 };
