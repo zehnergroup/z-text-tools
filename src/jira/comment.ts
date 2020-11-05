@@ -24,9 +24,9 @@ export default async (
       github: { owner, repo },
     } = config;
 
-    if (prNumberFromFeature && prNumber) {
+    if (prNumberFromFeature || prNumber) {
       const jiraCommentBody: string = getJiraCommentBody(
-        prNumberFromFeature || prNumber,
+        prNumberFromFeature || prNumber || 0,
         owner,
         repo,
         shopifyDevBaseURL,
