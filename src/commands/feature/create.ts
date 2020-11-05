@@ -17,6 +17,7 @@ export const builder = {
   id: {
     describe: "Ticket id",
     demand: true,
+    alias: 'i'
   },
   title: {
     describe: "Descriptive title to a feature (up to 5 words)",
