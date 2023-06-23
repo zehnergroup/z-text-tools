@@ -32,7 +32,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@octokit/rest": "^17.3.0",
+    "@octokit/rest": "^19.0.13",
     "chalk": "^4.0.0",
     "cli-table3": "^0.6.0",
     "js-yaml": "^3.13.1",
